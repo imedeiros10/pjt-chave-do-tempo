@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ritual da Lua</title>
+  <link rel="stylesheet" href="estilo.css">
+  <style>
+    body {
+      color: #fff;
+      font-family: 'Raleway', sans-serif;
+      text-align: center;
+      padding: 80px 20px;
+      overflow-x: hidden;
+      background: none;
+    }
+    #video-fundo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 80%;
+    }
+    #ritual-lua {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 40px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #D4AF37;
+    }
+    .etapa {
+      margin-bottom: 30px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      margin-bottom: 10px;
+      resize: none;
+    }
+    .sigilo {
+      font-size: 13px;
+      font-style: italic;
+      color: #fff8c4;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #D4AF37;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #b4922f;
+    }
+    .frase-magica {
+      font-style: italic;
+      font-size: 20px;
+      color: #fef6dc;
+      margin-top: 30px;
+      background-color: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+    .whatsapp-cta {
+      margin-top: 40px;
+      background-color: #fef6dc;
+      color: #5F080F;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+    .whatsapp-cta p {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .whatsapp-cta a {
+      background-color: #25D366;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      display: inline-block;
+    }
+    .estrelas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background: transparent;
+      overflow: hidden;
+    }
+    .estrela {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: brilhar 2s infinite ease-in-out;
+    }
+    @keyframes brilhar {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+    #contador {
+      font-size: 20px;
+      margin-top: 15px;
+      color: #fff8c4;
+    }
+    .instrucao {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #fff8c4;
+      font-weight: bold;
+      min-height: 40px;
+    }
+    .voltar {
+      margin-top: 30px;
+    }
+    .voltar a {
+      background-color: #fff;
+      color: #5F080F;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    .voltar a:hover {
+      background-color: #f0e6d2;
+    }
+  </style>
+</head>
+<body>
+  <video autoplay muted loop playsinline id="video-fundo">
+    <source src="assets/img/ritual-fundo.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo em HTML5.
+  </video>
+
+  <section id="ritual-lua">
+    <h2 id="titulo-ritual">🌕 Ritual da Lua</h2>
+
+    <!-- Etapa 1 -->
+    <div class="etapa" id="etapa1">
+      <p>1️⃣ Escreva sua intenção:</p>
+      <textarea id="intencao" placeholder="Ex: Quero liberar mágoas antigas..."></textarea>
+      <p class="sigilo">✨ Sua intenção está guardada com sigilo e respeito ✨</p>
+      <button onclick="salvarIntencao()">Salvar intenção</button>
+    </div>
+
+    <!-- Etapa 2 -->
+    <div class="etapa" id="etapa2" style="display:none;">
+      <p>2️⃣ Prepare-se para sua tiragem mágica:</p>
+      <div class="instrucao" id="instrucaoTexto"></div>
+      <div id="contador">20</div>
+    </div>
+
+    <!-- Etapa 3 -->
+    <div class="etapa" id="etapa3" style="display:none;">
+      <p>3️⃣ Receba a mensagem do universo:</p>
+      <div id="cartaImagem"></div>
+      <p class="frase-magica" id="fraseMagicaTexto"></p>
+
+      <div class="whatsapp-cta">
+        <p>🔮 Deseja aprofundar essa mensagem com uma consulta personalizada?</p>
+        <a href="https://api.whatsapp.com/send?phone=5511984540187" target="_blank">Agendar via WhatsApp</a>
+      </div>
+
+      <div class="voltar">
+        <a href="index.html">⟵ Voltar para a página principal</a>
+      </div>
+
+      <div class="estrelas" id="estrelas"></div>
+    </div>
+  </section>
+
+  <script>
+    async function atualizarTituloFaseLua() {
+      const apiKey = "38e99f57411c4870b40175921251504";
+      const hoje = new Date().toISOString().slice(0, 10);
+      const url = `https://api.weatherapi.com/v1/astronomy.json?key=${apiKey}&q=São Paulo&dt=${hoje}`;
+
+      const fasesTraduzidas = {
+        "New Moon": "Lua Nova",
+        "Waxing Crescent": "Lua Crescente",
+        "First Quarter": "Quarto Crescente",
+        "Waxing Gibbous": "Crescente Gibosa",
+        "Full Moon": "Lua Cheia",
+        "Waning Gibbous": "Minguante Gibosa",
+        "Last Quarter": "Quarto Minguante",
+        "Waning Crescent": "Lua Minguante"
+      };
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const faseEN = data.astronomy.astro.moon_phase;
+        const fasePT = fasesTraduzidas[faseEN] || faseEN;
+        document.getElementById("titulo-ritual").innerText = `🌙 Ritual da ${fasePT}`;
+      } catch (error) {
+        console.error("Erro ao buscar fase da lua para o ritual:", error);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", atualizarTituloFaseLua);
+
+    const som = new Audio("assets/sounds/mistico.mp3");
+    som.loop = true;
+    som.load();
+
+    function salvarIntencao() {
+      const texto = document.getElementById('intencao').value.trim();
+      if (!texto) return alert("Escreva sua intenção primeiro!");
+      localStorage.setItem("ritual-intencao", texto);
+      document.getElementById("etapa1").style.display = "none";
+      document.getElementById("etapa2").style.display = "block";
+      som.play().catch(err => console.log("Áudio não iniciado automaticamente:", err));
+      iniciarContador();
+    }
+
+    function iniciarContador() {
+      const instrucoes = [
+        "Respire fundo...",
+        "Pense na sua intenção...",
+        "Sinta sua energia se conectando ao ritual...",
+        "Imagine que as cartas lhe trarão uma luz nessa questão..."
+      ];
+      let tempo = 20;
+      let passoInstrucao = 0;
+      const contador = document.getElementById("contador");
+      const textoInstrucao = document.getElementById("instrucaoTexto");
+
+      textoInstrucao.textContent = instrucoes[passoInstrucao];
+
+      const intervalo = setInterval(() => {
+        tempo--;
+        contador.textContent = tempo;
+
+        if (tempo % 5 === 0 && passoInstrucao < instrucoes.length - 1) {
+          passoInstrucao++;
+          textoInstrucao.textContent = instrucoes[passoInstrucao];
+        }
+
+        if (tempo <= 0) {
+          clearInterval(intervalo);
+          sortearCarta();
+        }
+      }, 1000);
+    }
+
+    function sortearCarta() {
+      const cartas = [
+        { nome: "A Estrela", arquivo: "17_a_estrela.jpg", mensagem: "Esperança, renovação e luz após a escuridão." },
+        { nome: "A Morte", arquivo: "13_a_morte.jpg", mensagem: "Deixe ir o velho para renascer com força." },
+        { nome: "A Lua", arquivo: "18_a_lua.jpg", mensagem: "Intuição, profundidade e mistérios revelados." },
+        { nome: "O Sol", arquivo: "19_o_sol.jpg", mensagem: "Clareza, vitalidade e alegria renovada." }
+      ];
+
+      const frases = [
+        "Eu sou guiada pela luz da lua e da minha intuição.",
+        "Transmuto sombras em poder.",
+        "Tudo o que me limita agora se dissolve.",
+        "Hoje libero o que não me pertence mais.",
+        "Minha energia é sagrada e se renova."
+      ];
+
+      const carta = cartas[Math.floor(Math.random() * cartas.length)];
+      const frase = frases[Math.floor(Math.random() * frases.length)];
+
+      document.getElementById("etapa2").style.display = "none";
+      document.getElementById("etapa3").style.display = "block";
+
+      document.getElementById("cartaImagem").innerHTML = `
+        <h3>${carta.nome}</h3>
+        <img src="assets/cartas/${carta.arquivo}" alt="${carta.nome}" style="max-width: 200px; margin: 10px auto; border-radius: 8px; box-shadow: 0 0 10px rgba(255,255,255,0.3);" />
+        <p>${carta.mensagem}</p>
+      `;
+
+      document.getElementById("fraseMagicaTexto").innerText = `“${frase}”`;
+
+      gerarEstrelas();
+    }
+
+    function gerarEstrelas() {
+      const estrelasContainer = document.getElementById("estrelas");
+      estrelasContainer.innerHTML = "";
+      for (let i = 0; i < 50; i++) {
+        const estrela = document.createElement("div");
+        estrela.classList.add("estrela");
+        estrela.style.top = Math.random() * 100 + "%";
+        estrela.style.left = Math.random() * 100 + "%";
+        estrela.style.animationDelay = (Math.random() * 2) + "s";
+        estrelasContainer.appendChild(estrela);
+      }
+    }
+  </script>
+</body>
+</html>
