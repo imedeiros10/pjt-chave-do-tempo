@@ -1,3 +1,74 @@
+// === scripts-unificados.js ===
+
+
+
+// === Carrossel de Depoimentos (carrossel.js) ===
+
+// === carrossel.js ===
+document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.slide');
+    const bolinhas = document.querySelectorAll('.bolinha');
+    const esquerda = document.querySelector('.seta.esquerda');
+    const direita = document.querySelector('.seta.direita');
+    const pauseBtn = document.getElementById('pauseBtn');
+
+    if (!slides.length) return;
+
+    let indiceAtual = 0;
+    let intervalo;
+    let pausado = false;
+
+    function mostrarSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('ativo', i === index);
+            if (bolinhas[i]) bolinhas[i].classList.toggle('ativa', i === index);
+        });
+        indiceAtual = index;
+    }
+
+    function proximo() {
+        mostrarSlide((indiceAtual + 1) % slides.length);
+    }
+
+    function anterior() {
+        mostrarSlide((indiceAtual - 1 + slides.length) % slides.length);
+    }
+
+    function iniciarAuto() {
+        intervalo = setInterval(() => {
+            if (!pausado) proximo();
+        }, 5000);
+    }
+
+    function pararAuto() {
+        clearInterval(intervalo);
+    }
+
+    function reiniciarAuto() {
+        pararAuto();
+        if (!pausado) iniciarAuto();
+    }
+
+    direita?.addEventListener('click', () => { proximo(); reiniciarAuto(); });
+    esquerda?.addEventListener('click', () => { anterior(); reiniciarAuto(); });
+    bolinhas?.forEach((bolinha, index) => {
+        bolinha.addEventListener('click', () => {
+            mostrarSlide(index);
+            reiniciarAuto();
+        });
+    });
+
+    pauseBtn?.addEventListener('click', () => {
+        pausado = !pausado;
+        pauseBtn.textContent = pausado ? '▶️ Retomar' : '⏸ Pausar';
+    });
+
+    mostrarSlide(indiceAtual);
+    iniciarAuto();
+});
+
+// === Cartas do Tarot com WeatherAPI (cartas-multiplas-weatherapi.js) ===
+
 const cartas = [
     {
       nome: "O Louco",
@@ -230,3 +301,101 @@ const cartas = [
       audio.play();
     }
   });
+
+// === Efeito de Estrelas no Fundo (estrelas.js) ===
+
+// === estrelas.js ===
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.createElement('canvas');
+    canvas.id = 'estrelas';
+    document.body.appendChild(canvas);
+  
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+  
+    const estrelas = Array.from({ length: 100 }).map(() => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 1.5 + 0.5,
+      speed: Math.random() * 0.5 + 0.2
+    }));
+  
+    function desenhar() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      estrelas.forEach(estrela => {
+        ctx.beginPath();
+        ctx.arc(estrela.x, estrela.y, estrela.radius, 0, Math.PI * 2);
+        ctx.fill();
+        estrela.y += estrela.speed;
+        if (estrela.y > height) estrela.y = 0;
+      });
+      requestAnimationFrame(desenhar);
+    }
+  
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+  
+    desenhar();
+  });
+
+// === Cálculo e Exibição da Fase da Lua (fase-lua.js) ===
+
+// === fase-lua.js ===
+function calcularFaseLua(data) {
+    const ano = data.getFullYear();
+    const mes = data.getMonth() + 1;
+    const dia = data.getDate();
+    
+    const c = Math.floor((ano / 100));
+    const e = Math.floor(c / 4);
+    const f = c - e;
+    const g = Math.floor(((ano % 100) + (ano % 100) / 4) + 30.6 * ((mes + 9) % 12 + 1) + dia + 2 - f);
+    const fase = g % 30;
+  
+    if (fase < 7) return { nome: "Nova", emoji: "🌑", mensagem: "Hora de plantar ideias e começar novos ciclos." };
+    if (fase < 14) return { nome: "Crescente", emoji: "🌓", mensagem: "Momento de ação, foco e expansão." };
+    if (fase < 22) return { nome: "Cheia", emoji: "🌕", mensagem: "Expresse gratidão e colha o que foi plantado." };
+    return { nome: "Minguante", emoji: "🌘", mensagem: "Tempo de liberação, cura e descanso." };
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.createElement('div');
+    container.id = 'fase-lua';
+    document.body.prepend(container);
+  
+    const hoje = new Date();
+    const fase = calcularFaseLua(hoje);
+  
+    container.innerHTML = `
+      <div class="fase-lua-box">
+        <span class="lua-icon">${fase.emoji}</span>
+        <div>
+          <strong>Lua ${fase.nome}</strong><br>
+          <span>${fase.mensagem}</span>
+        </div>
+      </div>
+    `;
+  });
+
+// === Filtro dos Tipos de Consulta (filtros.js) ===
+
+// === filtros.js ===
+document.addEventListener('DOMContentLoaded', () => {
+    const botoesFiltro = document.querySelectorAll('.filtro');
+    const cards = document.querySelectorAll('.card');
+
+    botoesFiltro.forEach(botao => {
+        botao.addEventListener('click', () => {
+            const categoria = botao.getAttribute('data-categoria');
+
+            cards.forEach(card => {
+                const cardCategoria = card.getAttribute('data-categoria');
+                card.style.display = (categoria === 'todos' || categoria === cardCategoria) ? 'block' : 'none';
+            });
+        });
+    });
+});
